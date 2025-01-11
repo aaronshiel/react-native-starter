@@ -1,0 +1,47 @@
+Requirements:
+- xcode 15.4 (install through app store)
+- node 22.13.0 (install through nvm)
+- ruby 3.3.0 (install through rvm)
+
+## Other REQUIRED setups
+#### This is due to new react native version
+#### in ios folder
+$ pod install --repo-update
+- update xcode
+
+Installation Commands:
+# Run this if you get "too many open files" error upon npm start
+$ watchman
+
+# Install ruby 3.3.0
+$ rvm install 3.3.0 --with-openssl-dir=$(brew --prefix openssl)
+
+# Install gems
+$ bundle install
+
+
+## Running the app
+$ watchman
+$ npm start
+# wait for metro bundler to start
+$ i 
+
+
+# XCode Notes
+ - Must use ReactNativeMapleTemplate.xcworkspace for this project
+ - $ xed ./ios/ReactNativeMapleTemplate.xcworkspace
+
+# Troubleshooting
+- If building hangs, run the build in xcode for more info.
+- If you get "too many open files" error, run `watchman` in the terminal.
+
+
+## Dev Tools
+- CMD + D: open dev menu
+- CMD + I: open inspector
+- CMD + R: reload app
+- CMD + SHIFT + R: reload app (force)
+- CMD + SHIFT + H: open home
+- CMD + SHIFT + M: open menu
+- CMD + SHIFT + T: open terminal
+- CMD + SHIFT + Y: open debugger

@@ -2,6 +2,40 @@ Requirements:
 - xcode 15.4 (install through app store)
 - node 22.13.0 (install through nvm)
 - ruby 3.3.0 (install through rvm)
+- openssl 1.1.1 [downgrading from openssl@3](https://github.com/rbenv/homebrew-tap/issues/9#issuecomment-1646886958)
+- Apple Developer Account
+- [App-Specific Password](https://support.apple.com/en-us/102654)
+- Will need to create Test Group manually in App Store Connect
+- Ensure all contracts are agreed to in App Store Connect: https://appstoreconnect.apple.com/agreements/
+- Fastlane
+- Match
+- .env file at ./ios/fastlane/env.example
+
+Overview:
+- React Native for building the app
+- Use Fastlane for building and deploying the app
+- Use Match for code signing (belongs to guide below): https://docs.fastlane.tools/codesigning/getting-started/
+
+Troubleshooting
+- If building hangs, run the build in xcode for more info.
+- If you get "too many open files" error, run `watchman` in the terminal.
+- If you get "spaceship" error, ensure all contracts are agreed to in App Store Connect: https://appstoreconnect.apple.com/agreements/
+- If fastlane beta fails, run `fastlane certificates` to ensure all certificates, provisioning profiles, and team are set up correctly. Then go into xcode and select the correct provisioning profile.
+- If you get xcode errors similar to "No profile" or "Provisioning profile does not contain certificate," clear out provisioning profiles at ~/Library/MobileDevice/Provisioning\ Profiles, clear certs in the Keychain Acccess app, and then run $ fastlane match appstore
+-  "Error: EMFILE: too many open files, watch", I THINK just run `watchman` in the terminal.
+
+[Running on ios device](https://reactnative.dev/docs/running-on-device)
+- make sure development profile is setup correctly in xcode (run $ fastlane develop, then restart xcode)
+- Build and Run via xcode
+- Enable fast refresh on device (shake device to open menu, then enable)
+
+Match commands:
+Only run init once
+$ fastlane match init
+$ fastlane match development
+$ fastlane match appstore
+$ fastlane certificates
+$ fastlane pilot add email@example.com
 
 ## Other REQUIRED setups
 #### This is due to new react native version
@@ -30,10 +64,7 @@ $ i
 # XCode Notes
  - Must use ReactNativeMapleTemplate.xcworkspace for this project
  - $ xed ./ios/ReactNativeMapleTemplate.xcworkspace
-
-# Troubleshooting
-- If building hangs, run the build in xcode for more info.
-- If you get "too many open files" error, run `watchman` in the terminal.
+    
 
 
 ## Dev Tools
@@ -45,3 +76,18 @@ $ i
 - CMD + SHIFT + M: open menu
 - CMD + SHIFT + T: open terminal
 - CMD + SHIFT + Y: open debugger
+
+
+
+# ios testflight deployment
+Guide: https://thecodingmachine.github.io/react-native-boilerplate/docs/BetaBuild/
+ - Appfile contains identifiers used to connect to the Developer Portal and App Store Connect. You can read more about this file here.
+ - Fastfile contains the lanes used to build and deploy the app.
+
+Code Signing: Assures users that the app is safe to use
+ - 
+
+LEFT OFF: fastlane init --verbose
+reporting error with spaceship, configuration error?
+Error: 
+/Users/aaronshiel/.rvm/rubies/ruby-3.3.0/lib/ruby/gems/3.3.0/gems/fastlane-2.226.0/spaceship/lib/spaceship/connect_api/api_client.rb:223:in `handle_response'

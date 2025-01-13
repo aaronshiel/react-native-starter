@@ -1,0 +1,118 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "develop build and run on device"
+  lane :develop do
+    # Ensure we have the right certificates and provisioning profiles
+    match(
+      type: "development",
+      readonly: true
+    )
+    get_certificates( # Create or get certificate, and install it
+      output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
+    )
+    get_provisioning_profile( # Create or get provisioning profile
+      output_path: "./builds",  # Download provisioning profile in the build folder
+      filename: "development.mobileprovision", # Rename the local provisioning profile
+      development: true
+    )
+    update_project_provisioning(
+      xcodeproj: "ReactNativeMapleTemplate.xcodeproj",
+      target_filter: "ReactNativeMapleTemplate",
+      profile: "./builds/development.mobileprovision",
+      build_configuration: "Debug"
+    )
+    
+    update_project_team(
+      teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+    )
+    
+    # # Build the app
+    gym(
+      workspace: "ReactNativeMapleTemplate.xcworkspace",
+      scheme: "ReactNativeMapleTemplate",
+      configuration: "Debug",
+      export_method: "development",
+      clean: true
+    )
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    increment_build_number(xcodeproj: "ReactNativeMapleTemplate.xcodeproj")
+
+    get_certificates( # Create or get certificate, and install it
+      output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
+    )
+    get_provisioning_profile( # Create or get provisioning profile
+      output_path: "./builds",  # Download provisioning profile in the build folder
+      filename: "provisioning.mobileprovision" # Rename the local provisioning profile
+    )
+    update_project_provisioning( # Set the project provisioning profile (related in Xcode to the General > Signing Release section)
+      xcodeproj: "ReactNativeMapleTemplate.xcodeproj",
+      target_filter: "ReactNativeMapleTemplate",
+      profile: "./builds/provisioning.mobileprovision",
+      build_configuration: "Release"
+    )
+    update_project_team( # Set the right team on your project
+      teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+    )
+
+    build_app(
+      workspace: "ReactNativeMapleTemplate.xcworkspace",
+      scheme: "ReactNativeMapleTemplate",
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+            CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) + " AppStore" # Value of this parameter is the name of the Provisioning Profile. By default, it will be "{bundleId} AppStore"
+        }
+      },
+      build_path: "./builds",
+      output_directory: "./builds"
+      )
+    upload_to_testflight
+  end
+
+  desc "upload to testflight only"
+  lane :testflight_only do
+    upload_to_testflight(
+      ipa: "./builds/ReactNativeMapleTemplate.ipa",
+
+    )
+  end
+
+
+
+  # desc "Get certificates"
+  # lane :certificates do
+  #   sync_code_signing(
+  #     type: "development",
+  #     app_identifier: ['com.reactnative.maple.template'],
+  #     force_for_new_devices: true,
+  #     readonly: true
+  #   )
+
+  #   # # You can repeate the sync_code_signing with other types of certificates such as appstore and adhoc
+  #   # sync_code_signing(
+  #   #   type: "appstore",
+  #   #   app_identifier: 'com.company.example',
+  #   #   readonly: true
+  #   # )
+  # end
+end

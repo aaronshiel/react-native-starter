@@ -9,6 +9,7 @@ Requirements:
 - Ensure all contracts are agreed to in App Store Connect: https://appstoreconnect.apple.com/agreements/
 - Fastlane
 - Match
+- Both a release and development provisioning profile and certificate are needed via match (see match commands below)
 - .env file at ./ios/fastlane/env.example
 
 Overview:
@@ -23,10 +24,13 @@ Troubleshooting
 - If fastlane beta fails, run `fastlane certificates` to ensure all certificates, provisioning profiles, and team are set up correctly. Then go into xcode and select the correct provisioning profile.
 - If you get xcode errors similar to "No profile" or "Provisioning profile does not contain certificate," clear out provisioning profiles at ~/Library/MobileDevice/Provisioning\ Profiles, clear certs in the Keychain Acccess app, and then run $ fastlane match appstore
 -  "Error: EMFILE: too many open files, watch", I THINK just run `watchman` in the terminal.
+- Something with ruby being incompatible, could be due to having rvm and rbenv managing versions.
 
 [Running on ios device](https://reactnative.dev/docs/running-on-device)
 - make sure development profile is setup correctly in xcode (run $ fastlane develop, then restart xcode)
 - Build and Run via xcode
+- $ npm start
+- reload on device
 - Enable fast refresh on device (shake device to open menu, then enable)
 
 Match commands:
@@ -85,9 +89,5 @@ Guide: https://thecodingmachine.github.io/react-native-boilerplate/docs/BetaBuil
  - Fastfile contains the lanes used to build and deploy the app.
 
 Code Signing: Assures users that the app is safe to use
- - 
 
-LEFT OFF: fastlane init --verbose
-reporting error with spaceship, configuration error?
-Error: 
-/Users/aaronshiel/.rvm/rubies/ruby-3.3.0/lib/ruby/gems/3.3.0/gems/fastlane-2.226.0/spaceship/lib/spaceship/connect_api/api_client.rb:223:in `handle_response'
+LEFT OFF:

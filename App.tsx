@@ -61,11 +61,11 @@ function App(): React.JSX.Element {
     <SafeAreaView style={{
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      backgroundColor: 'white'
     }}>
-        <View>
-            <Text>Start of my journey!</Text>
-        </View>
+      <Text>🍂</Text>
+      <Text>React Native Maple Template</Text>
     </SafeAreaView>
   );
 }

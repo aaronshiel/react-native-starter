@@ -25,6 +25,10 @@ Troubleshooting
 - If you get xcode errors similar to "No profile" or "Provisioning profile does not contain certificate," clear out provisioning profiles at ~/Library/MobileDevice/Provisioning\ Profiles, clear certs in the Keychain Acccess app, and then run $ fastlane match appstore
 -  "Error: EMFILE: too many open files, watch", I THINK just run `watchman` in the terminal.
 - Something with ruby being incompatible, could be due to having rvm and rbenv managing versions.
+- "undefined method `unpack1' for nil". Need to clear cookies $ rm ~/.fastlane/spaceship/[your_apple_id]/cookie, and also maybe:
+    Run $ bundle clean --force
+    Delete your Gemfile.lock
+    Run $ bundle install again
 
 [Running on ios device](https://reactnative.dev/docs/running-on-device)
 - make sure development profile is setup correctly in xcode (run $ fastlane develop, then restart xcode)
@@ -90,4 +94,4 @@ Guide: https://thecodingmachine.github.io/react-native-boilerplate/docs/BetaBuil
 
 Code Signing: Assures users that the app is safe to use
 
-LEFT OFF:
+LEFT OFF: error: "The provided entity includes an attribute with a value that has already been used The bundle version must be higher than the previously uploaded version: ‘15’" This error started happening on second beta build.

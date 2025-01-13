@@ -1,5 +1,4 @@
 
 .PHONY: beta
 beta:
-	# fastlane certificates
-	fastlane beta
+	fastlane beta --verbose

@@ -64,7 +64,6 @@ function App(): React.JSX.Element {
       alignItems: 'center',
       backgroundColor: 'white'
     }}>
-      <Text>🍂</Text>
       <Text>React Native Maple Template</Text>
     </SafeAreaView>
   );

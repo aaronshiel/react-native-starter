@@ -54,7 +54,21 @@ platform :ios do
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    increment_build_number(xcodeproj: "ReactNativeMapleTemplate.xcodeproj")
+    # increment_version_number(
+    #   xcodeproj: "ReactNativeMapleTemplate.xcodeproj",
+    #   bump_type: "patch" # major, minor, patch, or specify version directly with `version_number: "1.0.0"`
+    # )
+    # app_store_connect_api_key
+    clean_build_artifacts
+    increment_version_number_in_xcodeproj(bump_type: "patch", target: "ReactNativeMapleTemplate")
+    increment_build_number(
+      xcodeproj: "ReactNativeMapleTemplate.xcodeproj",
+      build_number: latest_testflight_build_number + 1
+      )
+      build_number = get_build_number(
+        xcodeproj: "ReactNativeMapleTemplate.xcodeproj"
+      )
+      puts "Current Build Number: #{build_number}"
 
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
@@ -86,7 +100,9 @@ platform :ios do
       build_path: "./builds",
       output_directory: "./builds"
       )
-    upload_to_testflight
+    upload_to_testflight(
+      ipa: "./builds/ReactNativeMapleTemplate.ipa",
+    )
   end
 
   desc "upload to testflight only"

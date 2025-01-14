@@ -29,6 +29,9 @@ Troubleshooting
     Run $ bundle clean --force
     Delete your Gemfile.lock
     Run $ bundle install again
+- Bundle version not incrementing.     upload_to_testflight(
+      ipa: "./builds/ReactNativeMapleTemplate.ipa",
+    )
 
 [Running on ios device](https://reactnative.dev/docs/running-on-device)
 - make sure development profile is setup correctly in xcode (run $ fastlane develop, then restart xcode)

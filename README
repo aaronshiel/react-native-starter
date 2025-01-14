@@ -50,8 +50,7 @@ $ fastlane pilot add email@example.com
 
 ## Other REQUIRED setups
 #### This is due to new react native version
-#### in ios folder
-$ pod install --repo-update
+$ bundle exec pod install --project-directory=ios
 - update xcode
 
 Installation Commands:

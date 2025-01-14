@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -24,6 +25,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { useWithWebRTC } from './src/WebRTC/use-with-web-rtc';
+import { SocketStatus } from './src/WebRTC/use-with-socket';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -56,7 +59,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
-  
+  const {attemptSocketConnection, sendSocketMessage, socketStatus, closeSocket} = useWithWebRTC();
   return (
     <SafeAreaView style={{
       flex: 1,
@@ -64,7 +67,28 @@ function App(): React.JSX.Element {
       alignItems: 'center',
       backgroundColor: 'white'
     }}>
-      <Text>React Native Maple Template</Text>
+      <Text>WebRTC</Text>
+      <Button
+        title="Connect to Socket"
+        onPress={() => {
+          attemptSocketConnection();
+        }}
+      />
+      <Text>{socketStatus}</Text>
+      {socketStatus === SocketStatus.CONNECTED && 
+        <Button
+          title="Send Message"
+          onPress={()=>{
+            sendSocketMessage("Hello, world!")
+          }}
+         />
+      }
+      {socketStatus === SocketStatus.CONNECTED && 
+        <Button
+        title="Close Socket"
+        onPress={closeSocket}
+        />
+      }
     </SafeAreaView>
   );
 }
